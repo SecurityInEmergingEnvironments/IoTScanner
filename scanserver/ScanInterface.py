@@ -22,7 +22,7 @@ hosts file director, blacklist is the blacklisted hosts file director and firewa
 import NessusScanner
 import SshScanner
 import UpdatePolicy
-
+import MiraiScanner
 
 class ScanInterface(classmethod):
     def __init__(self, parent=None):
@@ -31,7 +31,9 @@ class ScanInterface(classmethod):
 
 
 def runScan(ip):
-    SshScanner.runScan(ip)
+    print(ip)
+    MiraiScanner.runScan(ip)
+    #SshScanner.runScan(ip)
     #NessusScanner.runScan(ip)
     #print ("this")
 
@@ -39,9 +41,8 @@ def runScan(ip):
 def getStatus():
     #global value
     value = 0
-    status = SshScanner.getStatus()
-    print(status)
-    #status = status + ',' + NessusScanner.getStatus()
+    status = MiraiScanner.getStatus()
+    #status = status + ',' + NessusScanner.getStatus() + ',' + MiraiScanner.getStatus()
     ScanStatus = status.split(',')
     count = len(ScanStatus)
     print (count)
@@ -51,11 +52,9 @@ def getStatus():
             value += 1
         else:
             value += 0
+    percent =round(((value / count ) * 100),2)
 
-
-    percent = (value / count ) * 100
-
-    if (percent > 50):
+    if (percent > 20):
         return 'Vulnerable'
     else:
         return 'Non-vulnerable'
